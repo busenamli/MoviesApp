@@ -4,11 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.busenamli.moviesapp.ui.uistate.MovieDetailUiState
 import com.busenamli.moviesapp.data.repository.MovieDetailRepositoryImpl
-import com.busenamli.moviesapp.NetworkResult
+import com.busenamli.moviesapp.network.NetworkResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 import java.io.IOException
 import javax.inject.Inject

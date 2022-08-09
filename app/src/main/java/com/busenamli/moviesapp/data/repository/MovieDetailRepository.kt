@@ -1,6 +1,6 @@
 package com.busenamli.moviesapp.data.repository
 
-import com.busenamli.moviesapp.NetworkResult
+import com.busenamli.moviesapp.network.NetworkResult
 import com.busenamli.moviesapp.data.model.CreditModel
 import com.busenamli.moviesapp.data.model.MoviesDetailModel
 import kotlinx.coroutines.flow.Flow

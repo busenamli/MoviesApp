@@ -1,7 +1,7 @@
 package com.busenamli.moviesapp.data.datasource
 
 import androidx.paging.PagingData
-import com.busenamli.moviesapp.NetworkResult
+import com.busenamli.moviesapp.network.NetworkResult
 import com.busenamli.moviesapp.data.model.CreditModel
 import com.busenamli.moviesapp.data.model.MovieModel
 import com.busenamli.moviesapp.data.model.MoviesDetailModel

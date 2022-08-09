@@ -1,4 +1,4 @@
-package com.busenamli.moviesapp
+package com.busenamli.moviesapp.network
 
 sealed class NetworkResult<out R> {
     data class Success<out T>(val data: T) : NetworkResult<T>()
