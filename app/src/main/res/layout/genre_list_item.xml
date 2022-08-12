@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="genreModel"
+            type="com.busenamli.moviesapp.data.model.GenreModel" />
+
+        <variable
+            name="listener"
+            type="com.busenamli.moviesapp.util.ItemOnClickListener"/>
+    </data>
+
+<androidx.cardview.widget.CardView
+    android:layout_width="100dp"
+    android:layout_height="50dp"
+    app:cardCornerRadius="10dp"
+    android:layout_margin="10dp"
+    android:onClick="@{listener::itemOnClicked}">
+
+    <TextView
+        android:id="@+id/genre_list_name_text"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="@{genreModel.name}"/>
+
+</androidx.cardview.widget.CardView>
+</layout>
