@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/movieListFragment"
-        android:name="com.busenamli.moviesapp.ui.movielist.MovieListFragment"
+        android:name="com.busenamli.moviesapp.ui.view.MovieListFragment"
         android:label="@string/list_fragment_label"
         tools:layout="@layout/fragment_movie_list">
         <action
@@ -17,14 +17,32 @@
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/action_movieListFragment_to_movieListByGenreFragment"
+            app:destination="@id/movieListByGenreFragment" />
     </fragment>
     <fragment
         android:id="@+id/movieDetailFragment"
-        android:name="com.busenamli.moviesapp.ui.moviedetail.MovieDetailFragment"
+        android:name="com.busenamli.moviesapp.ui.view.MovieDetailFragment"
         android:label="@string/detail_fragment_label"
         tools:layout="@layout/fragment_movie_detail" >
         <argument
             android:name="movieId"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_movieDetailFragment_to_movieListByGenreFragment"
+            app:destination="@id/movieListByGenreFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/movieListByGenreFragment"
+        android:name="com.busenamli.moviesapp.ui.view.MovieListByGenreFragment"
+        android:label="@string/genre_list_fragment_label"
+        tools:layout="@layout/fragment_movie_list_by_genre" >
+        <argument
+            android:name="genreId"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_movieListByGenreFragment_to_movieDetailFragment"
+            app:destination="@id/movieDetailFragment" />
     </fragment>
 </navigation>

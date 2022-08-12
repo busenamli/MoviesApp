@@ -14,7 +14,7 @@ class CrewModel (
     @SerializedName("original_name")
     val originalName: String,
     @SerializedName("credit_id")
-    val creditId: Int,
+    val creditId: String,
     @SerializedName("job")
     val job: String,
     @SerializedName("profile_path")

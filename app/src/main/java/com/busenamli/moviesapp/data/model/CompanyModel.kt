@@ -6,7 +6,7 @@ data class CompanyModel(
     @SerializedName("id")
     val id: Int,
     @SerializedName("logo_path")
-    val logoPath:String, //https://image.tmdb.org/t/p/original/hUzeosd33nzE5MCNsZxCGEKTXaQ.png
+    val logoPath:String,
     @SerializedName("name")
     val name: String,
     @SerializedName("origin_country")

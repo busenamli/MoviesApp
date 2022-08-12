@@ -19,7 +19,7 @@ import java.time.format.DateTimeFormatter
 fun ImageView.downloadFromUrl(url: String?, context: Context){
 
     val options = RequestOptions()
-        .error(R.mipmap.ic_launcher)
+        .error(R.drawable.circle_background)
         .placeholder(CircularProgressDrawable(context).apply {
             strokeWidth = 8f
             centerRadius = 40f

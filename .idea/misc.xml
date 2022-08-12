@@ -8,8 +8,11 @@
         <entry key="app/src/main/res/drawable/rectangle_outline.xml" value="0.2085" />
         <entry key="app/src/main/res/drawable/round_outline.xml" value="0.2085" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.19610507246376813" />
+        <entry key="app/src/main/res/layout/cast_list_item.xml" value="0.19610507246376813" />
         <entry key="app/src/main/res/layout/fragment_movie_detail.xml" value="0.165" />
         <entry key="app/src/main/res/layout/fragment_movie_list.xml" value="0.19610507246376813" />
+        <entry key="app/src/main/res/layout/fragment_movie_list_by_genre.xml" value="0.19610507246376813" />
+        <entry key="app/src/main/res/layout/genre_list_item.xml" value="0.19610507246376813" />
         <entry key="app/src/main/res/layout/movie_list_item.xml" value="0.375" />
       </map>
     </option>

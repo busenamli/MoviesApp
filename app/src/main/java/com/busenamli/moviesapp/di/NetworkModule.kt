@@ -1,6 +1,6 @@
 package com.busenamli.moviesapp.di
 
-import com.busenamli.moviesapp.network.MoviesService
+import com.busenamli.moviesapp.data.api.MoviesService
 import com.busenamli.moviesapp.util.Constants.BASE_URL
 import dagger.Module
 import dagger.Provides

@@ -5,7 +5,7 @@ import androidx.paging.PagingState
 import com.busenamli.moviesapp.data.model.MovieModel
 import com.busenamli.moviesapp.util.Constants.API_KEY
 import com.busenamli.moviesapp.util.Constants.LANGUAGE
-import com.busenamli.moviesapp.network.MoviesService
+import com.busenamli.moviesapp.data.api.MoviesService
 import retrofit2.HttpException
 import java.io.IOException
 import javax.inject.Inject

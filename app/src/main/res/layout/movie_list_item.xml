@@ -7,18 +7,17 @@
         <variable
             name="movieModel"
             type="com.busenamli.moviesapp.data.model.MovieModel" />
-    
+
         <variable
             name="listener"
-            type="com.busenamli.moviesapp.util.MovieItemOnClickListener" />
-    
+            type="com.busenamli.moviesapp.util.ItemOnClickListener" />
     </data>
 
 <androidx.cardview.widget.CardView
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="20dp"
-    android:onClick="@{listener::movieItemOnClicked}"
+    android:onClick="@{listener::itemOnClicked}"
     app:cardCornerRadius="15dp"
     app:cardBackgroundColor="@color/app_color3">
 
@@ -37,7 +36,7 @@
             android:id="@+id/movie_item_imageView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="fitCenter"
+            android:scaleType="centerCrop"
             android:outlineProvider="background"
             android:downloadUrl="@{movieModel.posterPath}"
             app:layout_constraintTop_toTopOf="parent"
@@ -74,7 +73,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:padding="5dp"
+            android:padding="2dp"
             android:layout_weight="3">
 
             <TextView
@@ -83,7 +82,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:layout_margin="5dp"
+                android:layout_margin="2dp"
                 android:text="@{movieModel.title}" />
 
         </RelativeLayout>
