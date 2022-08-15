@@ -37,9 +37,10 @@ fun View.changeVisibility(visible: Boolean){
     visibility = if (visible) View.VISIBLE else View.GONE
 }
 
-fun doubleFormat(double: Double): Double{
+fun doubleFormat(double: Double): String{
     val df = DecimalFormat("#.#")
-    return df.format(double).toDouble()
+    val formatted = df.format(double)
+    return formatted
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -64,7 +65,7 @@ fun runtimeFormat(view: TextView, runtime: Int?){
 @BindingAdapter("android:doubleFormat")
 fun doubleFormat(view: TextView, double:Double?){
     double?.let {
-        view.text = doubleFormat(it).toString() }
+        view.text = doubleFormat(it) }
 }
 
 @BindingAdapter("android:downloadUrl")

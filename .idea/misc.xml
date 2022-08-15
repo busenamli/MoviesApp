@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="../../../../layout/custom_preview.xml" value="0.12418725617685306" />
         <entry key="app/src/main/res/drawable/circle_background.xml" value="0.2085" />
         <entry key="app/src/main/res/drawable/circle_outline.xml" value="0.2085" />
         <entry key="app/src/main/res/drawable/rectangle_outline.xml" value="0.2085" />
