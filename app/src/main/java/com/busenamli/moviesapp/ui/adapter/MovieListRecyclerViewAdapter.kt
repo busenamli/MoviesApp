@@ -25,15 +25,27 @@ class MovieListRecyclerViewAdapter(private val action: Action): PagingDataAdapte
 
         override fun itemOnClicked(view: View) {
             val movieId = binding.movieModel?.id
-            movieId?.let {id ->
-                when(action){
-                    is Action.FromMovieList -> {
-                        val action = MovieListFragmentDirections.actionMovieListFragmentToMovieDetailFragment(id)
-                        Navigation.findNavController(view).navigate(action)
-                    }
-                    is Action.FromGenreList -> {
-                        val action = MovieListByGenreFragmentDirections.actionMovieListByGenreFragmentToMovieDetailFragment(id)
-                        Navigation.findNavController(view).navigate(action)
+            val movieName = binding.movieModel?.title
+            movieId?.let { id ->
+                movieName?.let { name ->
+                    when (action) {
+                        is Action.FromMovieList -> {
+
+                            val action =
+                                MovieListFragmentDirections.actionMovieListFragmentToMovieDetailFragment(
+                                    id,
+                                    name
+                                )
+                            Navigation.findNavController(view).navigate(action)
+                        }
+                        is Action.FromGenreList -> {
+                            val action =
+                                MovieListByGenreFragmentDirections.actionMovieListByGenreFragmentToMovieDetailFragment(
+                                    id,
+                                    name
+                                )
+                            Navigation.findNavController(view).navigate(action)
+                        }
                     }
                 }
             }

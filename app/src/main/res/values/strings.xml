@@ -2,9 +2,9 @@
     <string name="app_name">Movies App</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="detail_fragment_label">Detail</string>
-    <string name="list_fragment_label">Popular Movies</string>
-    <string name="genre_list_fragment_label">Genre</string>
+    <string name="detail_fragment_label">Detay</string>
+    <string name="list_fragment_label">Popüler Filmler</string>
+    <string name="genre_list_fragment_label">Kategori</string>
     <string name="error_text">Bağlantıda hata var. Lütfen tekrar deneyin!</string>
     <string name="seperate_text">|</string>
     <string name="cast_text">Oyuncular</string>

@@ -113,7 +113,8 @@ class MovieDetailFragment : Fragment() {
                 movieDetailViewModel.genreSelected(genreId)
                 val action =
                     MovieDetailFragmentDirections.actionMovieDetailFragmentToMovieListByGenreFragment(
-                        genreId
+                        genreId,
+                       genreText.toString()
                     )
                 Navigation.findNavController(view!!).navigate(action)
             }

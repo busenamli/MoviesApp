@@ -25,24 +25,30 @@
         android:id="@+id/movieDetailFragment"
         android:name="com.busenamli.moviesapp.ui.view.MovieDetailFragment"
         android:label="@string/detail_fragment_label"
-        tools:layout="@layout/fragment_movie_detail" >
+        tools:layout="@layout/fragment_movie_detail">
         <argument
             android:name="movieId"
             app:argType="integer" />
         <action
             android:id="@+id/action_movieDetailFragment_to_movieListByGenreFragment"
             app:destination="@id/movieListByGenreFragment" />
+        <argument
+            android:name="movieName"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/movieListByGenreFragment"
         android:name="com.busenamli.moviesapp.ui.view.MovieListByGenreFragment"
-        android:label="@string/genre_list_fragment_label"
-        tools:layout="@layout/fragment_movie_list_by_genre" >
+        android:label="{genreName}"
+        tools:layout="@layout/fragment_movie_list_by_genre">
         <argument
             android:name="genreId"
             app:argType="integer" />
         <action
             android:id="@+id/action_movieListByGenreFragment_to_movieDetailFragment"
             app:destination="@id/movieDetailFragment" />
+        <argument
+            android:name="genreName"
+            app:argType="string" />
     </fragment>
 </navigation>

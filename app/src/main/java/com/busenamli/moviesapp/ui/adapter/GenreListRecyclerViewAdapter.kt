@@ -21,9 +21,16 @@ class GenreListRecyclerViewAdapter(private val genreList: List<GenreModel>) : Re
 
         override fun itemOnClicked(view: View) {
             val genreId = binding.genreModel?.id
-            genreId?.let {
-                val action = MovieListFragmentDirections.actionMovieListFragmentToMovieListByGenreFragment(genreId)
-                Navigation.findNavController(view).navigate(action)
+            val genreName = binding.genreModel?.name
+            genreId?.let {id->
+                genreName?.let {name->
+                    val action =
+                        MovieListFragmentDirections.actionMovieListFragmentToMovieListByGenreFragment(
+                            id,
+                            name
+                        )
+                    Navigation.findNavController(view).navigate(action)
+                }
             }
         }
     }
