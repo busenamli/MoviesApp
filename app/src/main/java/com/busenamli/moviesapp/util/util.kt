@@ -1,11 +1,14 @@
 package com.busenamli.moviesapp.util
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
+import android.view.MotionEvent
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
+import androidx.core.widget.NestedScrollView
 import androidx.databinding.BindingAdapter
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
@@ -16,7 +19,7 @@ import java.text.DecimalFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-fun ImageView.downloadFromUrl(url: String?, context: Context){
+fun ImageView.downloadFromUrl(url: String?, context: Context) {
 
     val options = RequestOptions()
         .error(R.drawable.circle_background)
@@ -28,16 +31,16 @@ fun ImageView.downloadFromUrl(url: String?, context: Context){
 
     Glide.with(context)
         .setDefaultRequestOptions(options)
-        .load(IMAGE_URL+url)
+        .load(IMAGE_URL + url)
         .fitCenter()
         .into(this)
 }
 
-fun View.changeVisibility(visible: Boolean){
+fun View.changeVisibility(visible: Boolean) {
     visibility = if (visible) View.VISIBLE else View.GONE
 }
 
-fun doubleFormat(double: Double): String{
+fun doubleFormat(double: Double): String {
     val df = DecimalFormat("#.#")
     val formatted = df.format(double)
     return formatted
@@ -45,7 +48,7 @@ fun doubleFormat(double: Double): String{
 
 @RequiresApi(Build.VERSION_CODES.O)
 @BindingAdapter("android:dateFormat")
-fun dateFormat(view: TextView, date: String?){
+fun dateFormat(view: TextView, date: String?) {
     date?.let {
         val formatter = DateTimeFormatter.ofPattern("yyyy")
         val dateFormatted = LocalDate.parse(date).format(formatter)
@@ -55,20 +58,21 @@ fun dateFormat(view: TextView, date: String?){
 }
 
 @BindingAdapter("android:runtimeFormat")
-fun runtimeFormat(view: TextView, runtime: Int?){
+fun runtimeFormat(view: TextView, runtime: Int?) {
     runtime?.let {
-        val runtimeText = "${runtime/60}sa. ${runtime%60}dk."
+        val runtimeText = "${runtime / 60}sa. ${runtime % 60}dk."
         view.text = runtimeText
     }
 }
 
 @BindingAdapter("android:doubleFormat")
-fun doubleFormat(view: TextView, double:Double?){
+fun doubleFormat(view: TextView, double: Double?) {
     double?.let {
-        view.text = doubleFormat(it) }
+        view.text = doubleFormat(it)
+    }
 }
 
 @BindingAdapter("android:downloadUrl")
-fun downloadImage(view: ImageView, url:String?){
-    view.downloadFromUrl(url,view.context)
+fun downloadImage(view: ImageView, url: String?) {
+    view.downloadFromUrl(url, view.context)
 }

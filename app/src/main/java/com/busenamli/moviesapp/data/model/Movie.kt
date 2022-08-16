@@ -2,11 +2,11 @@ package com.busenamli.moviesapp.data.model
 
 import com.google.gson.annotations.SerializedName
 
-data class MovieModel(
+data class Movie(
     @SerializedName("id")
     val id: Int,
     @SerializedName("adult")
-    val adult:Boolean,
+    val adult: Boolean,
     @SerializedName("original_language")
     val originalLanguage: String,
     @SerializedName("title")

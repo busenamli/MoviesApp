@@ -8,16 +8,18 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.busenamli.moviesapp.databinding.MovieListItemBinding
-import com.busenamli.moviesapp.data.model.MovieModel
+import com.busenamli.moviesapp.data.model.Movie
 import com.busenamli.moviesapp.ui.uistate.Action
 import com.busenamli.moviesapp.ui.view.MovieListByGenreFragmentDirections
 import com.busenamli.moviesapp.ui.view.MovieListFragmentDirections
 import com.busenamli.moviesapp.util.ItemOnClickListener
 
-class MovieListRecyclerViewAdapter(private val action: Action): PagingDataAdapter<MovieModel, MovieListRecyclerViewAdapter.MoviesViewHolder>(MoviesComparator) {
+class MovieListRecyclerViewAdapter(private val action: Action) :
+    PagingDataAdapter<Movie, MovieListRecyclerViewAdapter.MoviesViewHolder>(MoviesComparator) {
 
-    class MoviesViewHolder(private val binding: MovieListItemBinding, private val action: Action):RecyclerView.ViewHolder(binding.root), ItemOnClickListener {
-        fun bind(item:MovieModel){
+    class MoviesViewHolder(private val binding: MovieListItemBinding, private val action: Action) :
+        RecyclerView.ViewHolder(binding.root), ItemOnClickListener {
+        fun bind(item: Movie) {
             binding.movieModel = item
             binding.listener = this
             binding.executePendingBindings()
@@ -53,23 +55,25 @@ class MovieListRecyclerViewAdapter(private val action: Action): PagingDataAdapte
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MoviesViewHolder {
-        val binding = MovieListItemBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+        val binding =
+            MovieListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MoviesViewHolder(binding, action)
     }
 
     override fun onBindViewHolder(holder: MoviesViewHolder, position: Int) {
         val item = getItem(position)
-        item?.let {movieModel ->
+        item?.let { movieModel ->
             holder.bind(movieModel)
         }
     }
 
-    object MoviesComparator: DiffUtil.ItemCallback<MovieModel>(){
+    object MoviesComparator : DiffUtil.ItemCallback<Movie>() {
 
-        override fun areItemsTheSame(oldItem: MovieModel, newItem: MovieModel): Boolean {
+        override fun areItemsTheSame(oldItem: Movie, newItem: Movie): Boolean {
             return oldItem.id == newItem.id
         }
-        override fun areContentsTheSame(oldItem: MovieModel, newItem: MovieModel): Boolean {
+
+        override fun areContentsTheSame(oldItem: Movie, newItem: Movie): Boolean {
             return oldItem == newItem
         }
     }

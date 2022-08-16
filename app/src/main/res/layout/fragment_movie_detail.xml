@@ -7,11 +7,12 @@
     <data>
         <variable
             name="movieDetail"
-            type="com.busenamli.moviesapp.data.model.MovieDetailModel" />
+            type="com.busenamli.moviesapp.data.model.MovieDetail" />
     </data>
 
 
 <androidx.core.widget.NestedScrollView
+    android:id="@+id/movie_detail_nested_scroll_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.view.MovieDetailFragment">

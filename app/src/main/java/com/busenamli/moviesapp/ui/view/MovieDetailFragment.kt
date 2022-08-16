@@ -14,7 +14,7 @@ import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.busenamli.moviesapp.ui.adapter.MovieDetailCreditRecyclerViewAdapter
-import com.busenamli.moviesapp.data.model.MovieDetailModel
+import com.busenamli.moviesapp.data.model.MovieDetail
 import com.busenamli.moviesapp.databinding.FragmentMovieDetailBinding
 import com.busenamli.moviesapp.ui.viewmodel.MovieDetailViewModel
 import com.busenamli.moviesapp.util.changeVisibility
@@ -26,7 +26,7 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class MovieDetailFragment : Fragment() {
 
-    private var _binding: FragmentMovieDetailBinding?= null
+    private var _binding: FragmentMovieDetailBinding? = null
     private val binding get() = _binding!!
     private val movieDetailArg: MovieDetailFragmentArgs by navArgs()
     private val movieDetailViewModel: MovieDetailViewModel by viewModels()
@@ -40,7 +40,7 @@ class MovieDetailFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentMovieDetailBinding.inflate(inflater,container,false)
+        _binding = FragmentMovieDetailBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -48,12 +48,13 @@ class MovieDetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val movieId = movieDetailArg.movieId
-        binding.movieDetailCastRecyclerview.layoutManager = LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false)
+        binding.movieDetailCastRecyclerview.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
 
         observeData(movieId)
     }
 
-    private fun observeData(movieId: Int){
+    private fun observeData(movieId: Int) {
 
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -61,17 +62,11 @@ class MovieDetailFragment : Fragment() {
 
                 movieDetailViewModel.uiState.collectLatest { movieDetailUiState ->
 
-                    /*movieDetailUiState.selectedGenre?.let {genreId->
-                    val action = MovieDetailFragmentDirections.actionMovieDetailFragmentToMovieListByGenreFragment(genreId)
-                    Navigation.findNavController(view!!).navigate(action)
-                    }*/
-
                     movieDetailUiState.errorMessage?.let { messages ->
-                        if(messages.isNotEmpty()){
-                            println(messages.size)
-                            val message = messages.get(messages.size-1)
+                        if (messages.isNotEmpty()) {
+                            val message = messages.get(messages.size - 1)
                             Toast.makeText(context, message.message, Toast.LENGTH_SHORT).show()
-                            movieDetailViewModel.errorMessageShown()
+                            movieDetailViewModel.errorMessageShown(message)
                         }
                     }
 
@@ -87,10 +82,11 @@ class MovieDetailFragment : Fragment() {
                         binding.movieDetail = model
                         setChips(model)
                         binding.movieDetailCastRecyclerview.changeVisibility(true)
-                        creditAdapter = MovieDetailCreditRecyclerViewAdapter(movieDetailUiState.cast)
+                        creditAdapter =
+                            MovieDetailCreditRecyclerViewAdapter(movieDetailUiState.cast)
                         binding.movieDetailCastRecyclerview.adapter = creditAdapter
 
-                    } else if (movieDetailUiState.isError == true){
+                    } else if (movieDetailUiState.isError == true) {
                         binding.movieDetailProgressBar.changeVisibility(false)
                         binding.movieLinear.changeVisibility(false)
                     }
@@ -99,7 +95,7 @@ class MovieDetailFragment : Fragment() {
         }
     }
 
-    fun setChips(model: MovieDetailModel){
+    fun setChips(model: MovieDetail) {
         binding.movieDetailChipGroup.removeAllViews()
         for (i in 0 until model.genres.size - 1) {
             val chip = Chip(context)
@@ -114,7 +110,7 @@ class MovieDetailFragment : Fragment() {
                 val action =
                     MovieDetailFragmentDirections.actionMovieDetailFragmentToMovieListByGenreFragment(
                         genreId,
-                       genreText.toString()
+                        genreText.toString()
                     )
                 Navigation.findNavController(view!!).navigate(action)
             }

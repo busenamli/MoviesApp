@@ -14,14 +14,15 @@ import java.io.IOException
 import javax.inject.Inject
 
 @HiltViewModel
-class MovieListByGenreViewModel @Inject constructor(private val movieRepository: MovieRepository): ViewModel(){
+class MovieListByGenreViewModel @Inject constructor(private val movieRepository: MovieRepository) :
+    ViewModel() {
 
     private val _uiState = MutableStateFlow(MovieUiState())
     val uiState: StateFlow<MovieUiState> = _uiState.asStateFlow()
     private val errorList: ArrayList<Message> = arrayListOf()
     private var fetchJob: Job? = null
 
-    fun fetchMoviesByGenre(genreId:Int){
+    fun fetchMoviesByGenre(genreId: Int) {
         fetchJob?.cancel()
         fetchJob = viewModelScope.launch {
             _uiState.update {
@@ -32,18 +33,24 @@ class MovieListByGenreViewModel @Inject constructor(private val movieRepository:
                 )
             }
             try {
-                movieRepository.fetchMoviesByGenre(genreId).cachedIn(viewModelScope).collectLatest {model->
-                    _uiState.update {
-                        it.copy(
-                            isLoading = false,
-                            movieList = model,
-                            genreId = genreId,
-                            isError = false
-                        )
+                movieRepository.fetchMoviesByGenre(genreId).cachedIn(viewModelScope)
+                    .collectLatest { model ->
+                        _uiState.update {
+                            it.copy(
+                                isLoading = false,
+                                movieList = model,
+                                genreId = genreId,
+                                isError = false
+                            )
+                        }
                     }
-                }
             } catch (e: IOException) {
-                errorList.add(Message(errorList.size,"Sayfa yüklenirken hata oluştu! Tekrar deneyin!"))
+                errorList.add(
+                    Message(
+                        errorList.size,
+                        "Sayfa yüklenirken hata oluştu! Tekrar deneyin!"
+                    )
+                )
                 _uiState.update {
                     it.copy(
                         isLoading = false,
@@ -58,9 +65,9 @@ class MovieListByGenreViewModel @Inject constructor(private val movieRepository:
         fetchJob!!.start()
     }
 
-    fun refreshList(){
+    fun refreshList() {
         errorList.clear()
-        _uiState.update {currentUiState->
+        _uiState.update { currentUiState ->
             currentUiState.copy(
                 errorMessage = errorList
             )
@@ -69,9 +76,9 @@ class MovieListByGenreViewModel @Inject constructor(private val movieRepository:
         genreId?.let { fetchMoviesByGenre(genreId) }
     }
 
-    fun errorMessageShown(){
-        errorList.removeAt(errorList.size-1)
-        _uiState.update {currentUiState->
+    fun errorMessageShown(error: Message) {
+        errorList.removeAt(errorList.indexOf(error))
+        _uiState.update { currentUiState ->
             currentUiState.copy(
                 errorMessage = errorList
             )

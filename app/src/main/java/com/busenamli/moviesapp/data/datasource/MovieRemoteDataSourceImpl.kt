@@ -17,9 +17,12 @@ import kotlinx.coroutines.flow.flowOn
 import java.io.IOException
 import javax.inject.Inject
 
-class MovieRemoteDataSourceImpl @Inject constructor(private val moviesService: MoviesService, @IoDispatcher private val ioDispatcher: CoroutineDispatcher): MovieRemoteDataSource {
+class MovieRemoteDataSourceImpl @Inject constructor(
+    private val moviesService: MoviesService,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+) : MovieRemoteDataSource {
 
-    override suspend fun fetchPopularMovies(): Flow<PagingData<MovieModel>> {
+    override suspend fun fetchPopularMovies(): Flow<PagingData<Movie>> {
         return Pager(
             config = PagingConfig(pageSize = PAGING_PAGE_SIZE)
         ) {
@@ -27,49 +30,49 @@ class MovieRemoteDataSourceImpl @Inject constructor(private val moviesService: M
         }.flow.flowOn(ioDispatcher)
     }
 
-    override suspend fun fetchMovieDetails(movieId: Int): Flow<NetworkResult<MovieDetailModel>> =
+    override suspend fun fetchMovieDetails(movieId: Int): Flow<NetworkResult<MovieDetail>> =
         flow {
             try {
                 val response = moviesService.fetchMovieDetail(movieId, API_KEY, LANGUAGE)
-                if (response.isSuccessful){
+                if (response.isSuccessful) {
                     emit(NetworkResult.Success(response.body()!!))
-                }else{
+                } else {
                     emit(NetworkResult.Error(response.message()))
                 }
-            }catch (e: IOException){
+            } catch (e: IOException) {
                 emit(NetworkResult.Error(e.message!!))
             }
         }.flowOn(ioDispatcher)
 
-    override suspend fun fetchMovieCredits(movieId: Int): Flow<NetworkResult<CreditModel>> =
+    override suspend fun fetchMovieCredits(movieId: Int): Flow<NetworkResult<Credit>> =
         flow {
             try {
                 val response = moviesService.fetchMovieCredits(movieId, API_KEY, LANGUAGE)
-                if (response.isSuccessful){
+                if (response.isSuccessful) {
                     emit(NetworkResult.Success(response.body()!!))
-                }else{
+                } else {
                     emit(NetworkResult.Error(response.message()))
                 }
-            }catch (e: IOException){
+            } catch (e: IOException) {
                 emit(NetworkResult.Error(e.message!!))
             }
         }.flowOn(ioDispatcher)
 
-    override suspend fun fetchGenreList(): Flow<NetworkResult<GenresResponseModel>> =
+    override suspend fun fetchGenreList(): Flow<NetworkResult<GenreResponse>> =
         flow {
             try {
                 val response = moviesService.fetchGenreList(API_KEY, LANGUAGE)
-                if (response.isSuccessful){
+                if (response.isSuccessful) {
                     emit(NetworkResult.Success(response.body()!!))
-                }else{
+                } else {
                     emit(NetworkResult.Error(response.message()))
                 }
-            }catch (e: IOException){
+            } catch (e: IOException) {
                 emit(NetworkResult.Error(e.message!!))
             }
         }.flowOn(ioDispatcher)
 
-    override suspend fun fetchMoviesByGenre(genreId: Int): Flow<PagingData<MovieModel>> {
+    override suspend fun fetchMoviesByGenre(genreId: Int): Flow<PagingData<Movie>> {
         return Pager(
             config = PagingConfig(pageSize = PAGING_PAGE_SIZE)
         ) {

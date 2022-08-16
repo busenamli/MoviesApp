@@ -2,7 +2,7 @@ package com.busenamli.moviesapp.data.model
 
 import com.google.gson.annotations.SerializedName
 
-data class MoviesResponseModel(
+data class MoviesResponse(
     @SerializedName("results")
-    val movieList: List<MovieModel> = listOf()
+    val movieList: List<Movie> = listOf()
 )

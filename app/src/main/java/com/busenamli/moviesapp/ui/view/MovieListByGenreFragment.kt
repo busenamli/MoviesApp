@@ -24,7 +24,7 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class MovieListByGenreFragment : Fragment() {
 
-    private var _binding: FragmentMovieListByGenreBinding?= null
+    private var _binding: FragmentMovieListByGenreBinding? = null
     private val binding get() = _binding!!
     private val genreArgs: MovieListByGenreFragmentArgs by navArgs()
     private val genreViewModel: MovieListByGenreViewModel by viewModels()
@@ -38,7 +38,7 @@ class MovieListByGenreFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentMovieListByGenreBinding.inflate(inflater,container,false)
+        _binding = FragmentMovieListByGenreBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -48,10 +48,10 @@ class MovieListByGenreFragment : Fragment() {
         val genreId = genreArgs.genreId
         pagingMovieListAdapter = MovieListRecyclerViewAdapter(Action.FromGenreList(true))
         val screenDp = activity!!.resources.configuration.screenWidthDp
-        binding.movieListByGenreRecylerview.layoutManager = when{
-            screenDp <= 600f -> GridLayoutManager(context,2)
-            screenDp <= 840f -> GridLayoutManager(context,4)
-            else -> GridLayoutManager(context,6)
+        binding.movieListByGenreRecylerview.layoutManager = when {
+            screenDp <= 600f -> GridLayoutManager(context, 2)
+            screenDp <= 840f -> GridLayoutManager(context, 4)
+            else -> GridLayoutManager(context, 6)
         }
         binding.movieListByGenreRecylerview.adapter = pagingMovieListAdapter
 
@@ -59,7 +59,7 @@ class MovieListByGenreFragment : Fragment() {
         observeData(genreId)
     }
 
-    private fun observeRefresh(){
+    private fun observeRefresh() {
         binding.movieListByGenreSwipeRefreshLayout.setOnRefreshListener {
             binding.movieListByGenreRecylerview.changeVisibility(false)
             binding.movieListByGenreProgressBar.changeVisibility(true)
@@ -78,11 +78,11 @@ class MovieListByGenreFragment : Fragment() {
                 genreViewModel.uiState.collectLatest { movieUiState ->
 
                     movieUiState.errorMessage?.let { messages ->
-                        if(messages.isNotEmpty()){
+                        if (messages.isNotEmpty()) {
                             println(messages.size)
-                            val message = messages.get(messages.size-1)
+                            val message = messages.get(messages.size - 1)
                             Toast.makeText(context, message.message, Toast.LENGTH_SHORT).show()
-                            genreViewModel.errorMessageShown()
+                            genreViewModel.errorMessageShown(message)
                         }
                     }
 
@@ -95,7 +95,7 @@ class MovieListByGenreFragment : Fragment() {
                         binding.movieListByGenreRecylerview.changeVisibility(true)
                         pagingMovieListAdapter.submitData(movieUiState.movieList)
 
-                    } else if (movieUiState.isError == true){
+                    } else if (movieUiState.isError == true) {
                         binding.movieListByGenreRecylerview.changeVisibility(false)
                         binding.movieListByGenreProgressBar.changeVisibility(false)
                     }

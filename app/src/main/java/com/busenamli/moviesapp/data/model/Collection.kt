@@ -2,7 +2,7 @@ package com.busenamli.moviesapp.data.model
 
 import com.google.gson.annotations.SerializedName
 
-data class CollectionModel(
+data class Collection(
     @SerializedName("id")
     val id: Int,
     @SerializedName("name")
@@ -10,5 +10,5 @@ data class CollectionModel(
     @SerializedName("poster_path")
     val posterPath: String,
     @SerializedName("backdrop_path")
-    val backdropPath:String
+    val backdropPath: String
 )

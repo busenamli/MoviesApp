@@ -1,11 +1,11 @@
 package com.busenamli.moviesapp.data.repository
 
 import com.busenamli.moviesapp.data.api.NetworkResult
-import com.busenamli.moviesapp.data.model.CreditModel
-import com.busenamli.moviesapp.data.model.MovieDetailModel
+import com.busenamli.moviesapp.data.model.Credit
+import com.busenamli.moviesapp.data.model.MovieDetail
 import kotlinx.coroutines.flow.Flow
 
 interface MovieDetailRepository {
-    suspend fun fetchMovieDetail(movieId: Int): Flow<NetworkResult<MovieDetailModel>>
-    suspend fun fetchMovieCredit(movieId: Int): Flow<NetworkResult<CreditModel>>
+    suspend fun fetchMovieDetail(movieId: Int): Flow<NetworkResult<MovieDetail>>
+    suspend fun fetchMovieCredit(movieId: Int): Flow<NetworkResult<Credit>>
 }

@@ -6,7 +6,7 @@
     <data>
         <variable
             name="movieModel"
-            type="com.busenamli.moviesapp.data.model.MovieModel" />
+            type="com.busenamli.moviesapp.data.model.Movie" />
 
         <variable
             name="listener"

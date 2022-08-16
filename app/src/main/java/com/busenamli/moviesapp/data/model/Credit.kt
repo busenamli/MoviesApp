@@ -2,11 +2,11 @@ package com.busenamli.moviesapp.data.model
 
 import com.google.gson.annotations.SerializedName
 
-class CreditModel (
+class Credit(
     @SerializedName("id")
     val id: Int,
     @SerializedName("cast")
-    val castModel: List<CastModel>,
+    val castModel: List<Cast>,
     @SerializedName("crew")
-    val crewModel: List<CrewModel>
+    val crewModel: List<Crew>
 )

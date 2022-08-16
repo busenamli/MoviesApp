@@ -2,11 +2,11 @@ package com.busenamli.moviesapp.data.model
 
 import com.google.gson.annotations.SerializedName
 
-data class MovieDetailModel(
+data class MovieDetail(
     @SerializedName("id")
     val id: Int,
     @SerializedName("adult")
-    val adult:Boolean,
+    val adult: Boolean,
     @SerializedName("original_language")
     val originalLanguage: String,
     @SerializedName("title")
@@ -20,19 +20,19 @@ data class MovieDetailModel(
     @SerializedName("poster_path")
     val posterPath: String,
     @SerializedName("genres")
-    val genres: List<GenreModel>,
+    val genres: List<Genre>,
     @SerializedName("runtime")
     val runtime: Int,
     @SerializedName("spoken_languages")
-    val spokenLanguages: List<LanguageModel>,
+    val spokenLanguages: List<Language>,
     @SerializedName("status")
     val status: String,
     @SerializedName("tagline")
     val tagline: String,
     @SerializedName("production_countries")
-    val productionCountries: List<CountryModel>,
+    val productionCountries: List<Country>,
     @SerializedName("production_companies")
-    val productionCompanies: List<CompanyModel>,
+    val productionCompanies: List<Company>,
     @SerializedName("popularity")
     val popularity: Double,
     @SerializedName("vote_average")

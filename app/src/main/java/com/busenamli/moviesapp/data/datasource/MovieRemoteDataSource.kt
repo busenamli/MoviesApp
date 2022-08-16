@@ -6,9 +6,9 @@ import com.busenamli.moviesapp.data.api.NetworkResult
 import kotlinx.coroutines.flow.Flow
 
 interface MovieRemoteDataSource {
-    suspend fun fetchPopularMovies(): Flow<PagingData<MovieModel>>
-    suspend fun fetchMovieDetails(movieId: Int): Flow<NetworkResult<MovieDetailModel>>
-    suspend fun fetchMovieCredits(movieId: Int): Flow<NetworkResult<CreditModel>>
-    suspend fun fetchGenreList(): Flow<NetworkResult<GenresResponseModel>>
-    suspend fun fetchMoviesByGenre(genreId: Int): Flow<PagingData<MovieModel>>
+    suspend fun fetchPopularMovies(): Flow<PagingData<Movie>>
+    suspend fun fetchMovieDetails(movieId: Int): Flow<NetworkResult<MovieDetail>>
+    suspend fun fetchMovieCredits(movieId: Int): Flow<NetworkResult<Credit>>
+    suspend fun fetchGenreList(): Flow<NetworkResult<GenreResponse>>
+    suspend fun fetchMoviesByGenre(genreId: Int): Flow<PagingData<Movie>>
 }

@@ -18,27 +18,27 @@ interface MoviesService {
         @Query("api_key") apiKey: String,
         @Query("language") language: String,
         @Query("page") page: Int
-    ): Response<MoviesResponseModel>
+    ): Response<MoviesResponse>
 
     @GET(GET_MOVIE_DETAIL)
     suspend fun fetchMovieDetail(
-        @Path("movie_id") movieId:Int,
+        @Path("movie_id") movieId: Int,
         @Query("api_key") apiKey: String,
         @Query("language") language: String,
-    ): Response<MovieDetailModel>
+    ): Response<MovieDetail>
 
     @GET(GET_MOVIE_CREDITS)
     suspend fun fetchMovieCredits(
-        @Path("movie_id") movieId:Int,
+        @Path("movie_id") movieId: Int,
         @Query("api_key") apiKey: String,
         @Query("language") language: String
-    ): Response<CreditModel>
+    ): Response<Credit>
 
     @GET(GET_GENRE_LIST)
     suspend fun fetchGenreList(
         @Query("api_key") apiKey: String,
         @Query("language") language: String
-    ): Response<GenresResponseModel>
+    ): Response<GenreResponse>
 
     @GET(GET_MOVIES_BY_GENRE_LIST)
     suspend fun fetchMoviesByGenreList(
@@ -46,5 +46,5 @@ interface MoviesService {
         @Query("language") language: String,
         @Query("with_genres") genreId: Int,
         @Query("page") page: Int
-    ): Response<MoviesResponseModel>
+    ): Response<MoviesResponse>
 }

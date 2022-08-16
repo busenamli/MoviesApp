@@ -2,7 +2,7 @@ package com.busenamli.moviesapp.data.model
 
 import com.google.gson.annotations.SerializedName
 
-class CastModel (
+class Crew(
     @SerializedName("id")
     val id: Int,
     @SerializedName("gender")
@@ -13,14 +13,10 @@ class CastModel (
     val name: String,
     @SerializedName("original_name")
     val originalName: String,
-    @SerializedName("cast_id")
-    val castId: Int,
-    @SerializedName("character")
-    val character: String,
     @SerializedName("credit_id")
     val creditId: String,
-    @SerializedName("order")
-    val order: Int,
+    @SerializedName("job")
+    val job: String,
     @SerializedName("profile_path")
     val profilePath: String
 )

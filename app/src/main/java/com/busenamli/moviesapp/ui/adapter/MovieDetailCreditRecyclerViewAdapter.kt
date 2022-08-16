@@ -3,20 +3,23 @@ package com.busenamli.moviesapp.ui.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.busenamli.moviesapp.data.model.CastModel
+import com.busenamli.moviesapp.data.model.Cast
 import com.busenamli.moviesapp.databinding.CastListItemBinding
 
-class MovieDetailCreditRecyclerViewAdapter(private val castList: List<CastModel>): RecyclerView.Adapter<MovieDetailCreditRecyclerViewAdapter.CreditListViewHolder>() {
+class MovieDetailCreditRecyclerViewAdapter(private val castList: List<Cast>) :
+    RecyclerView.Adapter<MovieDetailCreditRecyclerViewAdapter.CreditListViewHolder>() {
 
-    class CreditListViewHolder(private val binding: CastListItemBinding): RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: CastModel){
+    class CreditListViewHolder(private val binding: CastListItemBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(item: Cast) {
             binding.castModel = item
             binding.executePendingBindings()
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CreditListViewHolder {
-        val binding = CastListItemBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+        val binding =
+            CastListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return CreditListViewHolder(binding)
     }
 

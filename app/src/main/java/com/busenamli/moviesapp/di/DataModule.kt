@@ -18,12 +18,15 @@ import kotlinx.coroutines.CoroutineDispatcher
 object DataModule {
 
     @Provides
-    fun provideMovieRemoteDataSourceService(moviesService: MoviesService, @IoDispatcher dispatcher: CoroutineDispatcher): MovieRemoteDataSource {
+    fun provideMovieRemoteDataSourceService(
+        moviesService: MoviesService,
+        @IoDispatcher dispatcher: CoroutineDispatcher
+    ): MovieRemoteDataSource {
         return MovieRemoteDataSourceImpl(moviesService, dispatcher)
     }
 
     @Provides
-    fun provideMovieRepository(movieRemoteDataSource: MovieRemoteDataSource): MovieRepository{
+    fun provideMovieRepository(movieRemoteDataSource: MovieRemoteDataSource): MovieRepository {
         return MovieRepositoryImpl(movieRemoteDataSource)
     }
 

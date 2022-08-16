@@ -14,7 +14,8 @@ import java.io.IOException
 import javax.inject.Inject
 
 @HiltViewModel
-class MovieDetailViewModel @Inject constructor(private val moviesDetailRepository: MovieDetailRepository): ViewModel() {
+class MovieDetailViewModel @Inject constructor(private val moviesDetailRepository: MovieDetailRepository) :
+    ViewModel() {
 
     private val _uiState = MutableStateFlow(MovieDetailUiState())
     val uiState: StateFlow<MovieDetailUiState> = _uiState.asStateFlow()
@@ -22,7 +23,7 @@ class MovieDetailViewModel @Inject constructor(private val moviesDetailRepositor
     private var fetchJob: Job? = null
     private var fetchJobCredits: Job? = null
 
-    fun fetchMovieDetail(movieId: Int){
+    fun fetchMovieDetail(movieId: Int) {
         fetchJob?.cancel()
         fetchJob = viewModelScope.launch {
             _uiState.update {
@@ -32,8 +33,8 @@ class MovieDetailViewModel @Inject constructor(private val moviesDetailRepositor
                 )
             }
             try {
-                moviesDetailRepository.fetchMovieDetail(movieId).collect{networkResult->
-                    when(networkResult){
+                moviesDetailRepository.fetchMovieDetail(movieId).collect { networkResult ->
+                    when (networkResult) {
                         is NetworkResult.Success -> {
                             fetchMovieCredit(movieId)
                             _uiState.update {
@@ -45,7 +46,7 @@ class MovieDetailViewModel @Inject constructor(private val moviesDetailRepositor
                             }
                         }
                         is NetworkResult.Error -> {
-                            errorList.add(Message(errorList.size,"Sayfa yüklenirken hata oluştu!"))
+                            errorList.add(Message(errorList.size, "Sayfa yüklenirken hata oluştu!"))
                             _uiState.update {
                                 it.copy(
                                     isLoading = false,
@@ -56,8 +57,13 @@ class MovieDetailViewModel @Inject constructor(private val moviesDetailRepositor
                         }
                     }
                 }
-            }catch (e: IOException){
-                errorList.add(Message(errorList.size,"Sayfa yüklenirken hata oluştu! Tekrar deneyin!"))
+            } catch (e: IOException) {
+                errorList.add(
+                    Message(
+                        errorList.size,
+                        "Sayfa yüklenirken hata oluştu! Tekrar deneyin!"
+                    )
+                )
                 _uiState.update {
                     it.copy(
                         isLoading = false,
@@ -70,16 +76,16 @@ class MovieDetailViewModel @Inject constructor(private val moviesDetailRepositor
         fetchJob!!.start()
     }
 
-    fun errorMessageShown(){
-        errorList.removeAt(errorList.size-1)
-        _uiState.update {currentUiState->
+    fun errorMessageShown(error: Message) {
+        errorList.removeAt(errorList.indexOf(error))
+        _uiState.update { currentUiState ->
             currentUiState.copy(
                 errorMessage = errorList
             )
         }
     }
 
-    fun genreSelected(genreId: Int){
+    fun genreSelected(genreId: Int) {
         _uiState.update { currentUiState ->
             currentUiState.copy(
                 selectedGenre = genreId
@@ -91,8 +97,8 @@ class MovieDetailViewModel @Inject constructor(private val moviesDetailRepositor
         fetchJobCredits?.cancel()
         fetchJobCredits = viewModelScope.launch {
             try {
-                moviesDetailRepository.fetchMovieCredit(movieId).collectLatest {networkResult->
-                    when(networkResult){
+                moviesDetailRepository.fetchMovieCredit(movieId).collectLatest { networkResult ->
+                    when (networkResult) {
                         is NetworkResult.Success -> {
                             _uiState.update {
                                 it.copy(
@@ -101,7 +107,12 @@ class MovieDetailViewModel @Inject constructor(private val moviesDetailRepositor
                             }
                         }
                         is NetworkResult.Error -> {
-                            errorList.add(Message(errorList.size,"Oyuncular yüklenirken hata oluştu!"))
+                            errorList.add(
+                                Message(
+                                    errorList.size,
+                                    "Oyuncular yüklenirken hata oluştu!"
+                                )
+                            )
                             _uiState.value = MovieDetailUiState(
                                 cast = null,
                                 errorMessage = errorList
@@ -109,8 +120,13 @@ class MovieDetailViewModel @Inject constructor(private val moviesDetailRepositor
                         }
                     }
                 }
-            }catch (e: IOException){
-                errorList.add(Message(errorList.size,"Oyuncular yüklenirken hata oluştu! Tekrar deneyin!"))
+            } catch (e: IOException) {
+                errorList.add(
+                    Message(
+                        errorList.size,
+                        "Oyuncular yüklenirken hata oluştu! Tekrar deneyin!"
+                    )
+                )
                 MovieDetailUiState(
                     cast = null,
                     errorMessage = errorList

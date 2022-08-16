@@ -1,8 +1,8 @@
 package com.busenamli.moviesapp
 
-import org.junit.Test
-
+import com.busenamli.moviesapp.util.doubleFormat
 import org.junit.Assert.*
+import org.junit.Test
 
 /**
  * Example local unit test, which will execute on the development machine (host).

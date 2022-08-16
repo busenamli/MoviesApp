@@ -8,7 +8,6 @@ import com.busenamli.moviesapp.ui.uistate.Message
 import com.busenamli.moviesapp.ui.uistate.MovieUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.io.IOException
@@ -16,7 +15,8 @@ import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
-class MovieListViewModel @Inject constructor(private val movieRepository: MovieRepository): ViewModel() {
+class MovieListViewModel @Inject constructor(private val movieRepository: MovieRepository) :
+    ViewModel() {
 
     private val _uiState = MutableStateFlow(MovieUiState())
     val uiState: StateFlow<MovieUiState> = _uiState.asStateFlow()
@@ -29,7 +29,7 @@ class MovieListViewModel @Inject constructor(private val movieRepository: MovieR
         fetchGenreList()
     }
 
-    fun fetchPopularMovies(){
+    fun fetchPopularMovies() {
         fetchJob?.cancel()
         fetchJob = viewModelScope.launch {
             _uiState.update {
@@ -39,19 +39,24 @@ class MovieListViewModel @Inject constructor(private val movieRepository: MovieR
                     movieList = null
                 )
             }
-            delay(5000)
             try {
-                movieRepository.fetchPopularMovies().cachedIn(viewModelScope).collectLatest {model->
-                    _uiState.update {
-                        it.copy(
-                            isLoading = false,
-                            movieList = model,
-                            isError = false
-                        )
+                movieRepository.fetchPopularMovies().cachedIn(viewModelScope)
+                    .collectLatest { model ->
+                        _uiState.update {
+                            it.copy(
+                                isLoading = false,
+                                movieList = model,
+                                isError = false
+                            )
+                        }
                     }
-                }
             } catch (e: IOException) {
-                errorList.add(Message(errorList.size,"Sayfa yüklenirken hata oluştu! Tekrar deneyin!"))
+                errorList.add(
+                    Message(
+                        errorList.size,
+                        "Sayfa yüklenirken hata oluştu! Tekrar deneyin!"
+                    )
+                )
                 _uiState.update {
                     it.copy(
                         isLoading = false,
@@ -65,12 +70,12 @@ class MovieListViewModel @Inject constructor(private val movieRepository: MovieR
         fetchJob!!.start()
     }
 
-    fun fetchGenreList(){
+    fun fetchGenreList() {
         fetchJobGenre?.cancel()
         fetchJobGenre = viewModelScope.launch {
             try {
                 movieRepository.fetchGenreList().collect { networkResult ->
-                    when(networkResult) {
+                    when (networkResult) {
                         is NetworkResult.Success -> {
                             _uiState.update {
                                 it.copy(
@@ -79,7 +84,7 @@ class MovieListViewModel @Inject constructor(private val movieRepository: MovieR
                             }
                         }
                         is NetworkResult.Error -> {
-                            errorList.add(Message(errorList.size,"Sayfa yüklenirken hata oluştu!"))
+                            errorList.add(Message(errorList.size, "Sayfa yüklenirken hata oluştu!"))
                             _uiState.update {
                                 it.copy(
                                     genreList = null,
@@ -90,8 +95,13 @@ class MovieListViewModel @Inject constructor(private val movieRepository: MovieR
                         }
                     }
                 }
-            }catch (e: IOException){
-                errorList.add(Message(errorList.size,"Sayfa yüklenirken hata oluştu! Tekrar deneyin!"))
+            } catch (e: IOException) {
+                errorList.add(
+                    Message(
+                        errorList.size,
+                        "Sayfa yüklenirken hata oluştu! Tekrar deneyin!"
+                    )
+                )
                 _uiState.update {
                     it.copy(
                         genreList = null,
@@ -104,9 +114,9 @@ class MovieListViewModel @Inject constructor(private val movieRepository: MovieR
         fetchJobGenre?.start()
     }
 
-    fun refreshList(){
+    fun refreshList() {
         errorList.clear()
-        _uiState.update {currentUiState->
+        _uiState.update { currentUiState ->
             currentUiState.copy(
                 errorMessage = errorList
             )
@@ -115,9 +125,9 @@ class MovieListViewModel @Inject constructor(private val movieRepository: MovieR
         fetchGenreList()
     }
 
-    fun errorMessageShown(){
-        errorList.removeAt(errorList.size-1)
-        _uiState.update {currentUiState->
+    fun errorMessageShown(error: Message) {
+        errorList.removeAt(errorList.indexOf(error))
+        _uiState.update { currentUiState ->
             currentUiState.copy(
                 errorMessage = errorList
             )
