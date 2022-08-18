@@ -1,11 +1,11 @@
 package com.busenamli.moviesapp.ui.view
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -13,9 +13,10 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.busenamli.moviesapp.ui.adapter.MovieDetailCreditRecyclerViewAdapter
 import com.busenamli.moviesapp.data.model.MovieDetail
 import com.busenamli.moviesapp.databinding.FragmentMovieDetailBinding
+import com.busenamli.moviesapp.ui.adapter.MovieDetailCreditRecyclerViewAdapter
+import com.busenamli.moviesapp.ui.uistate.ScrollState
 import com.busenamli.moviesapp.ui.viewmodel.MovieDetailViewModel
 import com.busenamli.moviesapp.util.changeVisibility
 import com.google.android.material.chip.Chip
@@ -31,6 +32,8 @@ class MovieDetailFragment : Fragment() {
     private val movieDetailArg: MovieDetailFragmentArgs by navArgs()
     private val movieDetailViewModel: MovieDetailViewModel by viewModels()
     private lateinit var creditAdapter: MovieDetailCreditRecyclerViewAdapter
+    private var indexItem = 0
+    private var topView = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,7 +67,7 @@ class MovieDetailFragment : Fragment() {
 
                     movieDetailUiState.errorMessage?.let { messages ->
                         if (messages.isNotEmpty()) {
-                            val message = messages.get(messages.size - 1)
+                            val message = messages[messages.size - 1]
                             Toast.makeText(context, message.message, Toast.LENGTH_SHORT).show()
                             movieDetailViewModel.errorMessageShown(message)
                         }
@@ -77,7 +80,6 @@ class MovieDetailFragment : Fragment() {
                     } else if (movieDetailUiState.movie != null && movieDetailUiState.cast != null) {
                         binding.movieDetailProgressBar.changeVisibility(false)
                         binding.movieLinear.changeVisibility(true)
-                        println(movieDetailUiState.movie)
                         val model = movieDetailUiState.movie
                         binding.movieDetail = model
                         setChips(model)
@@ -85,6 +87,19 @@ class MovieDetailFragment : Fragment() {
                         creditAdapter =
                             MovieDetailCreditRecyclerViewAdapter(movieDetailUiState.cast)
                         binding.movieDetailCastRecyclerview.adapter = creditAdapter
+
+                        movieDetailViewModel.uiState.value.pageScrollState?.let { position ->
+                            position.positionX?.let {
+                                binding.movieDetailNestedScrollView.scrollX = it
+                            }
+                            position.positionY?.let {
+                                binding.movieDetailNestedScrollView.scrollY = it
+                            }
+                        }
+
+                        movieDetailViewModel.uiState.value.creditListScrollState?.let { position ->
+                            position?.let { scrollToPosition(it) }
+                        }
 
                     } else if (movieDetailUiState.isError == true) {
                         binding.movieDetailProgressBar.changeVisibility(false)
@@ -95,7 +110,7 @@ class MovieDetailFragment : Fragment() {
         }
     }
 
-    fun setChips(model: MovieDetail) {
+    private fun setChips(model: MovieDetail) {
         binding.movieDetailChipGroup.removeAllViews()
         for (i in 0 until model.genres.size - 1) {
             val chip = Chip(context)
@@ -105,7 +120,7 @@ class MovieDetailFragment : Fragment() {
             chip.setOnClickListener {
                 val genreText = chip.text
                 val genreId = chip.id
-                println(genreId.toString() + "-" + genreText)
+
                 movieDetailViewModel.genreSelected(genreId)
                 val action =
                     MovieDetailFragmentDirections.actionMovieDetailFragmentToMovieListByGenreFragment(
@@ -118,8 +133,33 @@ class MovieDetailFragment : Fragment() {
         }
     }
 
+    private fun setScrollState() {
+        val pageScrollState = ScrollState(
+            binding.movieDetailNestedScrollView.scrollX,
+            binding.movieDetailNestedScrollView.scrollY
+        )
+        movieDetailViewModel.savePageScrollState(pageScrollState)
+
+        val lastFirstVisiblePosition =
+            (binding.movieDetailCastRecyclerview.layoutManager as? LinearLayoutManager)?.findFirstCompletelyVisibleItemPosition()
+        lastFirstVisiblePosition?.let { movieDetailViewModel.saveCreditListScrollState(it) }
+    }
+
+    private fun scrollToPosition(positon: Int) {
+        (binding.movieDetailCastRecyclerview.layoutManager as? LinearLayoutManager)?.scrollToPositionWithOffset(
+            positon,
+            0
+        )
+    }
+
+    override fun onStop() {
+        super.onStop()
+        setScrollState()
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
+        setScrollState()
         _binding = null
     }
 }

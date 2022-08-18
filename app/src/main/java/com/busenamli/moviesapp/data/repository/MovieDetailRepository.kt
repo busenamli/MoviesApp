@@ -6,6 +6,6 @@ import com.busenamli.moviesapp.data.model.MovieDetail
 import kotlinx.coroutines.flow.Flow
 
 interface MovieDetailRepository {
-    suspend fun fetchMovieDetail(movieId: Int): Flow<NetworkResult<MovieDetail>>
-    suspend fun fetchMovieCredit(movieId: Int): Flow<NetworkResult<Credit>>
+    suspend fun fetchMovieDetail(movieId: Int): NetworkResult<MovieDetail>
+    suspend fun fetchMovieCredit(movieId: Int): NetworkResult<Credit>
 }

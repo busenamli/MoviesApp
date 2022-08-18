@@ -8,6 +8,7 @@ import com.busenamli.moviesapp.ui.uistate.Message
 import com.busenamli.moviesapp.ui.uistate.MovieUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.io.IOException
@@ -25,6 +26,11 @@ class MovieListViewModel @Inject constructor(private val movieRepository: MovieR
     private var fetchJobGenre: Job? = null
 
     init {
+        _uiState.update {
+            it.copy(
+                isLoading = true,
+            )
+        }
         fetchPopularMovies()
         fetchGenreList()
     }
@@ -32,13 +38,6 @@ class MovieListViewModel @Inject constructor(private val movieRepository: MovieR
     fun fetchPopularMovies() {
         fetchJob?.cancel()
         fetchJob = viewModelScope.launch {
-            _uiState.update {
-                it.copy(
-                    isLoading = true,
-                    isError = false,
-                    movieList = null
-                )
-            }
             try {
                 movieRepository.fetchPopularMovies().cachedIn(viewModelScope)
                     .collectLatest { model ->
@@ -67,31 +66,30 @@ class MovieListViewModel @Inject constructor(private val movieRepository: MovieR
                 }
             }
         }
-        fetchJob!!.start()
+        fetchJob?.start()
     }
 
     fun fetchGenreList() {
         fetchJobGenre?.cancel()
         fetchJobGenre = viewModelScope.launch {
             try {
-                movieRepository.fetchGenreList().collect { networkResult ->
-                    when (networkResult) {
-                        is NetworkResult.Success -> {
-                            _uiState.update {
-                                it.copy(
-                                    genreList = networkResult.data.genreList
-                                )
-                            }
+                val response = movieRepository.fetchGenreList()
+                when (response) {
+                    is NetworkResult.Success -> {
+                        _uiState.update {
+                            it.copy(
+                                genreList = response.data.genreList
+                            )
                         }
-                        is NetworkResult.Error -> {
-                            errorList.add(Message(errorList.size, "Sayfa yüklenirken hata oluştu!"))
-                            _uiState.update {
-                                it.copy(
-                                    genreList = null,
-                                    isError = true,
-                                    errorMessage = errorList
-                                )
-                            }
+                    }
+                    is NetworkResult.Error -> {
+                        errorList.add(Message(errorList.size, "Sayfa yüklenirken hata oluştu!"))
+                        _uiState.update {
+                            it.copy(
+                                genreList = null,
+                                isError = true,
+                                errorMessage = errorList
+                            )
                         }
                     }
                 }
@@ -118,7 +116,8 @@ class MovieListViewModel @Inject constructor(private val movieRepository: MovieR
         errorList.clear()
         _uiState.update { currentUiState ->
             currentUiState.copy(
-                errorMessage = errorList
+                errorMessage = errorList,
+                isRefresh = true
             )
         }
         fetchPopularMovies()

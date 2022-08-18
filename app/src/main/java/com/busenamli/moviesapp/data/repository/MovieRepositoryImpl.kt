@@ -5,7 +5,7 @@ import com.busenamli.moviesapp.data.datasource.MovieRemoteDataSource
 import com.busenamli.moviesapp.data.model.GenreResponse
 import com.busenamli.moviesapp.data.model.Movie
 import com.busenamli.moviesapp.data.api.NetworkResult
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
 class MovieRepositoryImpl @Inject constructor(private val movieRemoteDataSource: MovieRemoteDataSource) :
@@ -14,8 +14,24 @@ class MovieRepositoryImpl @Inject constructor(private val movieRemoteDataSource:
     override suspend fun fetchPopularMovies(): Flow<PagingData<Movie>> =
         movieRemoteDataSource.fetchPopularMovies()
 
-    override suspend fun fetchGenreList(): Flow<NetworkResult<GenreResponse>> =
-        movieRemoteDataSource.fetchGenreList()
+    override suspend fun fetchGenreList(): NetworkResult<GenreResponse> {
+        try {
+            lateinit var response: NetworkResult<GenreResponse>
+            movieRemoteDataSource.fetchGenreList().collect { networkResult ->
+                when (networkResult) {
+                    is NetworkResult.Success -> {
+                        response = NetworkResult.Success(networkResult.data)
+                    }
+                    is NetworkResult.Error -> {
+                        response = NetworkResult.Error(networkResult.exception)
+                    }
+                }
+            }
+            return response
+        } catch (e: Exception) {
+            return NetworkResult.Error(e.message.toString())
+        }
+    }
 
     override suspend fun fetchMoviesByGenre(genreId: Int): Flow<PagingData<Movie>> =
         movieRemoteDataSource.fetchMoviesByGenre(genreId)

@@ -44,7 +44,7 @@ class MovieListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        pagingMovieListAdapter = MovieListRecyclerViewAdapter(Action.FromMovieList(true))
+        pagingMovieListAdapter = MovieListRecyclerViewAdapter(Action.FromMovieList)
         binding.genresRecyclerview.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         val screenDp = activity!!.resources.configuration.screenWidthDp

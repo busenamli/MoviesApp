@@ -8,6 +8,7 @@ import com.busenamli.moviesapp.ui.uistate.Message
 import com.busenamli.moviesapp.ui.uistate.MovieUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.io.IOException
@@ -22,13 +23,19 @@ class MovieListByGenreViewModel @Inject constructor(private val movieRepository:
     private val errorList: ArrayList<Message> = arrayListOf()
     private var fetchJob: Job? = null
 
+    init {
+        _uiState.update {
+            it.copy(
+                isLoading = true
+            )
+        }
+    }
+
     fun fetchMoviesByGenre(genreId: Int) {
         fetchJob?.cancel()
         fetchJob = viewModelScope.launch {
             _uiState.update {
                 it.copy(
-                    isLoading = true,
-                    isError = false,
                     genreId = genreId
                 )
             }
@@ -69,7 +76,8 @@ class MovieListByGenreViewModel @Inject constructor(private val movieRepository:
         errorList.clear()
         _uiState.update { currentUiState ->
             currentUiState.copy(
-                errorMessage = errorList
+                errorMessage = errorList,
+                isRefresh = true
             )
         }
         val genreId = _uiState.value.genreId

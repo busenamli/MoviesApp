@@ -9,5 +9,7 @@ data class MovieDetailUiState(
     val cast: List<Cast>? = null,
     val isError: Boolean? = false,
     val errorMessage: List<Message>? = listOf(),
-    val selectedGenre: Int? = null
+    val selectedGenre: Int? = null,
+    val pageScrollState: ScrollState? = null,
+    val creditListScrollState: Int? = null
 )

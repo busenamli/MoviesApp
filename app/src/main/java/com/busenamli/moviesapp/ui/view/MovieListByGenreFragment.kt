@@ -46,7 +46,7 @@ class MovieListByGenreFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val genreId = genreArgs.genreId
-        pagingMovieListAdapter = MovieListRecyclerViewAdapter(Action.FromGenreList(true))
+        pagingMovieListAdapter = MovieListRecyclerViewAdapter(Action.FromGenreList)
         val screenDp = activity!!.resources.configuration.screenWidthDp
         binding.movieListByGenreRecylerview.layoutManager = when {
             screenDp <= 600f -> GridLayoutManager(context, 2)
@@ -80,7 +80,7 @@ class MovieListByGenreFragment : Fragment() {
                     movieUiState.errorMessage?.let { messages ->
                         if (messages.isNotEmpty()) {
                             println(messages.size)
-                            val message = messages.get(messages.size - 1)
+                            val message = messages[messages.size - 1]
                             Toast.makeText(context, message.message, Toast.LENGTH_SHORT).show()
                             genreViewModel.errorMessageShown(message)
                         }

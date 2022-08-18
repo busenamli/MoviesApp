@@ -8,20 +8,10 @@ import org.junit.Test
 
 class UtilKtTest {
 
-    @Before
-    fun setup(){
-
-    }
-
-    @After
-    fun teardown(){
-
-    }
-
     @Test
     fun doubleFormat() {
         val actual = doubleFormat(8.2)
         val expected = "8,2"
-        assertEquals(expected,actual)
+        assertEquals(expected, actual)
     }
 }

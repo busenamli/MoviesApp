@@ -8,6 +8,6 @@ import kotlinx.coroutines.flow.*
 
 interface MovieRepository {
     suspend fun fetchPopularMovies(): Flow<PagingData<Movie>>
-    suspend fun fetchGenreList(): Flow<NetworkResult<GenreResponse>>
+    suspend fun fetchGenreList(): NetworkResult<GenreResponse>
     suspend fun fetchMoviesByGenre(genreId: Int): Flow<PagingData<Movie>>
 }

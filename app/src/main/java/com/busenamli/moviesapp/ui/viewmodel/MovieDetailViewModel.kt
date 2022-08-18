@@ -6,6 +6,7 @@ import com.busenamli.moviesapp.data.repository.MovieDetailRepository
 import com.busenamli.moviesapp.ui.uistate.MovieDetailUiState
 import com.busenamli.moviesapp.data.api.NetworkResult
 import com.busenamli.moviesapp.ui.uistate.Message
+import com.busenamli.moviesapp.ui.uistate.ScrollState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.*
@@ -23,37 +24,38 @@ class MovieDetailViewModel @Inject constructor(private val moviesDetailRepositor
     private var fetchJob: Job? = null
     private var fetchJobCredits: Job? = null
 
+    init {
+        _uiState.update {
+            it.copy(
+                isLoading = true
+            )
+        }
+    }
+
     fun fetchMovieDetail(movieId: Int) {
         fetchJob?.cancel()
         fetchJob = viewModelScope.launch {
-            _uiState.update {
-                it.copy(
-                    isLoading = true,
-                    isError = false
-                )
-            }
             try {
-                moviesDetailRepository.fetchMovieDetail(movieId).collect { networkResult ->
-                    when (networkResult) {
-                        is NetworkResult.Success -> {
-                            fetchMovieCredit(movieId)
-                            _uiState.update {
-                                it.copy(
-                                    isLoading = false,
-                                    movie = networkResult.data,
-                                    isError = false
-                                )
-                            }
+                val response = moviesDetailRepository.fetchMovieDetail(movieId)
+                when (response) {
+                    is NetworkResult.Success -> {
+                        fetchMovieCredit(movieId)
+                        _uiState.update {
+                            it.copy(
+                                isLoading = false,
+                                movie = response.data,
+                                isError = false
+                            )
                         }
-                        is NetworkResult.Error -> {
-                            errorList.add(Message(errorList.size, "Sayfa yüklenirken hata oluştu!"))
-                            _uiState.update {
-                                it.copy(
-                                    isLoading = false,
-                                    isError = true,
-                                    errorMessage = errorList
-                                )
-                            }
+                    }
+                    is NetworkResult.Error -> {
+                        errorList.add(Message(errorList.size, "Sayfa yüklenirken hata oluştu!"))
+                        _uiState.update {
+                            it.copy(
+                                isLoading = false,
+                                isError = true,
+                                errorMessage = errorList
+                            )
                         }
                     }
                 }
@@ -93,31 +95,46 @@ class MovieDetailViewModel @Inject constructor(private val moviesDetailRepositor
         }
     }
 
+    fun savePageScrollState(position: ScrollState) {
+        _uiState.update {
+            it.copy(
+                pageScrollState = position
+            )
+        }
+    }
+
+    fun saveCreditListScrollState(position: Int) {
+        _uiState.update {
+            it.copy(
+                creditListScrollState = position
+            )
+        }
+    }
+
     fun fetchMovieCredit(movieId: Int) {
         fetchJobCredits?.cancel()
         fetchJobCredits = viewModelScope.launch {
             try {
-                moviesDetailRepository.fetchMovieCredit(movieId).collectLatest { networkResult ->
-                    when (networkResult) {
-                        is NetworkResult.Success -> {
-                            _uiState.update {
-                                it.copy(
-                                    cast = networkResult.data.castModel
-                                )
-                            }
-                        }
-                        is NetworkResult.Error -> {
-                            errorList.add(
-                                Message(
-                                    errorList.size,
-                                    "Oyuncular yüklenirken hata oluştu!"
-                                )
-                            )
-                            _uiState.value = MovieDetailUiState(
-                                cast = null,
-                                errorMessage = errorList
+                val response = moviesDetailRepository.fetchMovieCredit(movieId)
+                when (response) {
+                    is NetworkResult.Success -> {
+                        _uiState.update {
+                            it.copy(
+                                cast = response.data.castModel
                             )
                         }
+                    }
+                    is NetworkResult.Error -> {
+                        errorList.add(
+                            Message(
+                                errorList.size,
+                                "Oyuncular yüklenirken hata oluştu!"
+                            )
+                        )
+                        _uiState.value = MovieDetailUiState(
+                            cast = null,
+                            errorMessage = errorList
+                        )
                     }
                 }
             } catch (e: IOException) {
