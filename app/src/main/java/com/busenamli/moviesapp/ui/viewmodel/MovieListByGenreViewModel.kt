@@ -93,6 +93,33 @@ class MovieListByGenreViewModel @Inject constructor(private val movieRepository:
         }
     }
 
+    fun networkCheck(status: Boolean){
+        if (!status) {
+            errorList.add(
+                Message(
+                    errorList.size,
+                    "İnternet bağlantısı bulunamadı!"
+                )
+            )
+            _uiState.update { currentUiState ->
+                currentUiState.copy(
+                    isLoading = false,
+                    isNetworkConnection = false,
+                    isError = true,
+                    errorMessage = errorList
+                )
+            }
+        }else{
+            _uiState.update { currentUiState ->
+                currentUiState.copy(
+                    isLoading = false,
+                    isNetworkConnection = true,
+                    isError = false,
+                )
+            }
+        }
+    }
+
     override fun onCleared() {
         super.onCleared()
         fetchJob?.cancel()

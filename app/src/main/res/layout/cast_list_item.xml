@@ -3,54 +3,55 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="castModel"
             type="com.busenamli.moviesapp.data.model.Cast" />
     </data>
 
-<androidx.cardview.widget.CardView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_margin="10dp"
-    app:cardCornerRadius="10dp"
-    android:background="@color/cardview_dark_background">
-
-    <LinearLayout
-        android:layout_width="150dp"
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_margin="10dp"
+        android:background="@color/cardview_dark_background"
+        app:cardCornerRadius="10dp">
 
-        <ImageView
-            android:id="@+id/cast_item_imageView"
-            android:layout_width="match_parent"
-            android:layout_height="170dp"
-            android:layout_weight="1"
-            android:adjustViewBounds="true"
-            android:downloadUrl="@{castModel.profilePath}"
-            android:outlineProvider="background"
-            android:scaleType="centerCrop"
-            app:srcCompat="@drawable/circle_background" />
+        <LinearLayout
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:padding="2dp"
-            android:layout_weight="3">
+            <ImageView
+                android:id="@+id/cast_item_imageView"
+                android:layout_width="match_parent"
+                android:layout_height="170dp"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:downloadUrl="@{castModel.profilePath}"
+                android:outlineProvider="background"
+                android:scaleType="centerCrop"
+                app:srcCompat="@drawable/circle_background" />
 
-            <TextView
-                android:id="@+id/cast_item_name"
-                style="@style/TextAppearance.AppCompat.Body2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:foregroundGravity="center"
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
                 android:gravity="center"
-                android:text="@{castModel.name}"
-                android:layout_margin="5dp"
-                android:padding="5dp" />
+                android:padding="2dp">
 
-        </RelativeLayout>
+                <TextView
+                    android:id="@+id/cast_item_name"
+                    style="@style/TextAppearance.AppCompat.Body2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:foregroundGravity="center"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:text="@{castModel.name}" />
 
-    </LinearLayout>
-</androidx.cardview.widget.CardView>
+            </RelativeLayout>
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 </layout>

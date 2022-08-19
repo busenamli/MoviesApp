@@ -16,6 +16,7 @@ import com.busenamli.moviesapp.ui.adapter.MovieListRecyclerViewAdapter
 import com.busenamli.moviesapp.databinding.FragmentMovieListByGenreBinding
 import com.busenamli.moviesapp.ui.viewmodel.MovieListByGenreViewModel
 import com.busenamli.moviesapp.ui.uistate.Action
+import com.busenamli.moviesapp.util.Network
 import com.busenamli.moviesapp.util.changeVisibility
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -61,10 +62,20 @@ class MovieListByGenreFragment : Fragment() {
 
     private fun observeRefresh() {
         binding.movieListByGenreSwipeRefreshLayout.setOnRefreshListener {
+            checkNetwork()
             binding.movieListByGenreRecylerview.changeVisibility(false)
             binding.movieListByGenreProgressBar.changeVisibility(true)
             genreViewModel.refreshList()
             binding.movieListByGenreSwipeRefreshLayout.isRefreshing = false
+        }
+    }
+
+    private fun checkNetwork(){
+        if (context?.let { Network.checkConnectivity(it) } == true){
+            genreViewModel.networkCheck(true)
+        }
+        else {
+            genreViewModel.networkCheck(false)
         }
     }
 
@@ -73,6 +84,7 @@ class MovieListByGenreFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
 
+                checkNetwork()
                 genreViewModel.fetchMoviesByGenre(genreId)
 
                 genreViewModel.uiState.collectLatest { movieUiState ->

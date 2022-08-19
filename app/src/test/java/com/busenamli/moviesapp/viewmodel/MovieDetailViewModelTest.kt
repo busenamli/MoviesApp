@@ -1,7 +1,7 @@
 package com.busenamli.moviesapp.viewmodel
 
 import com.busenamli.moviesapp.MainCoroutineRule
-import com.busenamli.moviesapp.TestModel
+import com.busenamli.moviesapp.model.TestModel
 import com.busenamli.moviesapp.repository.FakeMovieDetailRepository
 import com.busenamli.moviesapp.ui.viewmodel.MovieDetailViewModel
 import com.google.common.truth.Truth.assertThat
@@ -10,7 +10,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.MockitoAnnotations
 
 @ExperimentalCoroutinesApi
 class MovieDetailViewModelTest {
@@ -23,7 +22,6 @@ class MovieDetailViewModelTest {
 
     @Before
     fun setup() {
-        MockitoAnnotations.initMocks(this)
         repository = FakeMovieDetailRepository()
         viewModel = MovieDetailViewModel(repository)
     }
@@ -38,7 +36,6 @@ class MovieDetailViewModelTest {
     fun `Movie Detail - Check Movie Detail`() {
         viewModel.fetchMovieDetail(1)
         val result = viewModel.uiState.value.movie
-        //assertTrue(result != null)
         assertThat(TestModel.movieDetailModel).isEqualTo(result)
     }
 

@@ -12,4 +12,5 @@ data class MovieUiState(
     val isRefresh: Boolean? = false,
     val genreList: List<Genre>? = listOf(),
     val genreId: Int? = null,
+    val isNetworkConnection: Boolean? = true
 )

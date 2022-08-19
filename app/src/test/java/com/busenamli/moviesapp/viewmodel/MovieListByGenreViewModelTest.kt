@@ -1,19 +1,14 @@
 package com.busenamli.moviesapp.viewmodel
 
-import androidx.paging.PagingData
 import com.busenamli.moviesapp.MainCoroutineRule
-import com.busenamli.moviesapp.TestModel
 import com.busenamli.moviesapp.repository.FakeMovieRepository
 import com.busenamli.moviesapp.ui.viewmodel.MovieListByGenreViewModel
-import com.google.common.truth.Truth
+import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
-
 import org.junit.Test
-import org.mockito.MockitoAnnotations
 
 @ExperimentalCoroutinesApi
 class MovieListByGenreViewModelTest {
@@ -26,7 +21,6 @@ class MovieListByGenreViewModelTest {
 
     @Before
     fun setup() {
-        MockitoAnnotations.initMocks(this)
         repository = FakeMovieRepository()
         viewModel = MovieListByGenreViewModel(repository)
     }
@@ -34,17 +28,57 @@ class MovieListByGenreViewModelTest {
     @Test
     fun `Movie List By Genre - Return Loading True If Initial Setup of View Model`() {
         val result = viewModel.uiState.value.isLoading
-        Truth.assertThat(result).isTrue()
+        assertThat(result).isTrue()
     }
 
     @Test
     fun `Movie List By Genre - Check Movie List`() = runTest {
-        repository.networkError(false)
-        repository.fetchMoviesByGenre(1).collectLatest {
-            viewModel.fetchMoviesByGenre(1)
-            val result = viewModel.uiState.value.movieList
-            //assertTrue(result != null)
-            Truth.assertThat(result).isEqualTo(PagingData.from(listOf(TestModel.movieDetailModel)))
-        }
+        viewModel.fetchMoviesByGenre(1)
+        val result = viewModel.uiState.value.movieList
+        assertThat(result != null).isTrue()
+    }
+
+    @Test
+    fun `Movie List By Genre - Return Loading False If Movie List Not Null`() = runTest {
+        viewModel.networkCheck(true)
+        viewModel.fetchMoviesByGenre(1)
+        viewModel.uiState.value.movieList
+        val result = viewModel.uiState.value.isLoading
+        assertThat(result).isFalse()
+    }
+
+    @Test
+    fun `Movie List By Genre - Return Network Connection False If Network Check False`() {
+        viewModel.networkCheck(false)
+        val result = viewModel.uiState.value.isNetworkConnection
+        assertThat(result).isFalse()
+    }
+
+    @Test
+    fun `Movie List By Genre - Return Network Connection True If Network Check False`() {
+        viewModel.networkCheck(true)
+        val result = viewModel.uiState.value.isNetworkConnection
+        assertThat(result).isTrue()
+    }
+
+    @Test
+    fun `Movie List By Genre - Return Error True If Network Check False`() {
+        viewModel.networkCheck(false)
+        val result = viewModel.uiState.value.isError
+        assertThat(result).isTrue()
+    }
+
+    @Test
+    fun `Movie List By Genre - Return Error False If Network Check True`() {
+        viewModel.networkCheck(true)
+        val result = viewModel.uiState.value.isError
+        assertThat(result).isFalse()
+    }
+
+    @Test
+    fun `Movie List By Genre - Error Message Not Null If Network Check False`() {
+        viewModel.networkCheck(false)
+        val result = viewModel.uiState.value.errorMessage
+        assertThat(result != null).isTrue()
     }
 }

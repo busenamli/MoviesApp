@@ -1,4 +1,4 @@
-package com.busenamli.moviesapp
+package com.busenamli.moviesapp.model
 
 import com.busenamli.moviesapp.data.model.*
 

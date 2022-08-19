@@ -1,19 +1,16 @@
 package com.busenamli.moviesapp.viewmodel
 
-import androidx.paging.PagingData
 import com.busenamli.moviesapp.MainCoroutineRule
-import com.busenamli.moviesapp.TestModel
+import com.busenamli.moviesapp.model.TestModel
 import com.busenamli.moviesapp.repository.FakeMovieRepository
 import com.busenamli.moviesapp.ui.viewmodel.MovieListViewModel
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.MockitoAnnotations
 
 @ExperimentalCoroutinesApi
 class MovieListViewModelTest {
@@ -26,7 +23,6 @@ class MovieListViewModelTest {
 
     @Before
     fun setup() {
-        MockitoAnnotations.initMocks(this)
         repository = FakeMovieRepository()
         viewModel = MovieListViewModel(repository)
     }
@@ -79,14 +75,19 @@ class MovieListViewModelTest {
     }
 
     @Test
-    fun `Movie List - Is Movie List Return Same List`() = runTest {
+    fun `Movie List - Check Movie List`() = runTest {
         repository.networkError(false)
-        repository.fetchPopularMovies().collectLatest {
-            viewModel.fetchPopularMovies()
-            val result = viewModel.uiState.value.movieList
-            //assertTrue(result != null)
-            assertThat(result).isEqualTo(PagingData.from(listOf(TestModel.movieDetailModel)))
-        }
+        viewModel.fetchPopularMovies()
+        val result = viewModel.uiState.value.movieList
+        assertThat(result != null).isTrue()
+    }
+
+    @Test
+    fun `Movie List - Check Error If Movie List Not Null`() = runTest {
+        repository.networkError(false)
+        viewModel.fetchPopularMovies()
+        val result = viewModel.uiState.value.isError
+        assertThat(result).isFalse()
     }
 
     @Test
