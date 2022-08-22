@@ -1,8 +1,9 @@
 package com.busenamli.moviesapp.viewmodel
 
 import com.busenamli.moviesapp.MainCoroutineRule
+import com.busenamli.moviesapp.data.repository.MovieDetailRepositoryImpl
+import com.busenamli.moviesapp.datasource.FakeMovieRemoteDataSource
 import com.busenamli.moviesapp.model.TestModel
-import com.busenamli.moviesapp.repository.FakeMovieDetailRepository
 import com.busenamli.moviesapp.ui.viewmodel.MovieDetailViewModel
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -15,14 +16,16 @@ import org.junit.Test
 class MovieDetailViewModelTest {
 
     private lateinit var viewModel: MovieDetailViewModel
-    private lateinit var repository: FakeMovieDetailRepository
+    private lateinit var repository: MovieDetailRepositoryImpl
+    private lateinit var dataSource: FakeMovieRemoteDataSource
 
     @get:Rule
     val testRule = MainCoroutineRule()
 
     @Before
     fun setup() {
-        repository = FakeMovieDetailRepository()
+        dataSource = FakeMovieRemoteDataSource()
+        repository = MovieDetailRepositoryImpl(dataSource)
         viewModel = MovieDetailViewModel(repository)
     }
 
@@ -41,7 +44,7 @@ class MovieDetailViewModelTest {
 
     @Test
     fun `Movie Detail - Check isError True If Network Result Error`() {
-        repository.networkError(true)
+        dataSource.networkError(true)
         viewModel.fetchMovieDetail(1)
         val result = viewModel.uiState.value.isError
         assertThat(result).isEqualTo(true)
@@ -49,7 +52,7 @@ class MovieDetailViewModelTest {
 
     @Test
     fun `Movie Detail - Check Error Message If Network Result Error`() {
-        repository.networkError(true)
+        dataSource.networkError(true)
         viewModel.fetchMovieDetail(1)
         val message = viewModel.uiState.value.errorMessage
         val result = message?.get(message.lastIndex)?.message
@@ -58,7 +61,7 @@ class MovieDetailViewModelTest {
 
     @Test
     fun `Movie Detail - Check Error Message If Network Result Success`() {
-        repository.networkError(false)
+        dataSource.networkError(false)
         viewModel.fetchMovieDetail(1)
         val result = viewModel.uiState.value.errorMessage?.size
         assertEquals(0, result)

@@ -1,8 +1,9 @@
 package com.busenamli.moviesapp.viewmodel
 
 import com.busenamli.moviesapp.MainCoroutineRule
+import com.busenamli.moviesapp.data.repository.MovieRepositoryImpl
+import com.busenamli.moviesapp.datasource.FakeMovieRemoteDataSource
 import com.busenamli.moviesapp.model.TestModel
-import com.busenamli.moviesapp.repository.FakeMovieRepository
 import com.busenamli.moviesapp.ui.viewmodel.MovieListViewModel
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -16,14 +17,16 @@ import org.junit.Test
 class MovieListViewModelTest {
 
     private lateinit var viewModel: MovieListViewModel
-    private lateinit var repository: FakeMovieRepository
+    private lateinit var repository: MovieRepositoryImpl
+    private lateinit var dataSource: FakeMovieRemoteDataSource
 
     @get:Rule
     val testRule = MainCoroutineRule()
 
     @Before
     fun setup() {
-        repository = FakeMovieRepository()
+        dataSource = FakeMovieRemoteDataSource()
+        repository = MovieRepositoryImpl(dataSource)
         viewModel = MovieListViewModel(repository)
     }
 
@@ -35,7 +38,7 @@ class MovieListViewModelTest {
 
     @Test
     fun `Movie List - Check isError True If Network Result Error`() {
-        repository.networkError(true)
+        dataSource.networkError(true)
         viewModel.fetchGenreList()
         val result = viewModel.uiState.value.isError
         assertThat(result).isEqualTo(true)
@@ -43,7 +46,7 @@ class MovieListViewModelTest {
 
     @Test
     fun `Movie List - Check Error Message If Network Result Error`() {
-        repository.networkError(true)
+        dataSource.networkError(true)
         viewModel.fetchGenreList()
         val message = viewModel.uiState.value.errorMessage
         val result = message?.get(message.lastIndex)?.message
@@ -52,7 +55,7 @@ class MovieListViewModelTest {
 
     @Test
     fun `Movie List - Check Error Message If Network Result Success`() {
-        repository.networkError(false)
+        dataSource.networkError(false)
         viewModel.fetchGenreList()
         val result = viewModel.uiState.value.errorMessage?.size
         assertEquals(0, result)
@@ -60,7 +63,7 @@ class MovieListViewModelTest {
 
     @Test
     fun `Movie List - Check Genre List If Network Result Success`() {
-        repository.networkError(false)
+        dataSource.networkError(false)
         viewModel.fetchGenreList()
         val result = viewModel.uiState.value.genreList
         assertThat(result).isEqualTo(TestModel.genreListModel)
@@ -68,7 +71,7 @@ class MovieListViewModelTest {
 
     @Test
     fun `Movie List - Check Genre List If Network Result Error`() {
-        repository.networkError(true)
+        dataSource.networkError(true)
         viewModel.fetchGenreList()
         val result = viewModel.uiState.value.genreList
         assertThat(result).isEqualTo(null)
@@ -76,7 +79,7 @@ class MovieListViewModelTest {
 
     @Test
     fun `Movie List - Check Movie List`() = runTest {
-        repository.networkError(false)
+        dataSource.networkError(false)
         viewModel.fetchPopularMovies()
         val result = viewModel.uiState.value.movieList
         assertThat(result != null).isTrue()
@@ -84,7 +87,7 @@ class MovieListViewModelTest {
 
     @Test
     fun `Movie List - Check Error If Movie List Not Null`() = runTest {
-        repository.networkError(false)
+        dataSource.networkError(false)
         viewModel.fetchPopularMovies()
         val result = viewModel.uiState.value.isError
         assertThat(result).isFalse()
@@ -92,7 +95,7 @@ class MovieListViewModelTest {
 
     @Test
     fun `Movie List - Error Message Shown`() = runTest {
-        repository.networkError(true)
+        dataSource.networkError(true)
         viewModel.fetchGenreList()
         val message = viewModel.uiState.value.errorMessage
         assertThat(message?.size).isEqualTo(1)
@@ -105,7 +108,7 @@ class MovieListViewModelTest {
 
     @Test
     fun `Movie List - Is Refresh Working`() = runTest {
-        repository.networkError(false)
+        dataSource.networkError(false)
         viewModel.refreshList()
         val result = viewModel.uiState.value.isRefresh
         assertThat(result).isTrue()

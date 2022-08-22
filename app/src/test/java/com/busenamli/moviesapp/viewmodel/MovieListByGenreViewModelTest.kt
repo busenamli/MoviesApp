@@ -1,7 +1,8 @@
 package com.busenamli.moviesapp.viewmodel
 
 import com.busenamli.moviesapp.MainCoroutineRule
-import com.busenamli.moviesapp.repository.FakeMovieRepository
+import com.busenamli.moviesapp.data.repository.MovieRepositoryImpl
+import com.busenamli.moviesapp.datasource.FakeMovieRemoteDataSource
 import com.busenamli.moviesapp.ui.viewmodel.MovieListByGenreViewModel
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -14,14 +15,16 @@ import org.junit.Test
 class MovieListByGenreViewModelTest {
 
     private lateinit var viewModel: MovieListByGenreViewModel
-    private lateinit var repository: FakeMovieRepository
+    private lateinit var repository: MovieRepositoryImpl
+    private lateinit var dataSource: FakeMovieRemoteDataSource
 
     @get:Rule
     val testRule = MainCoroutineRule()
 
     @Before
     fun setup() {
-        repository = FakeMovieRepository()
+        dataSource = FakeMovieRemoteDataSource()
+        repository = MovieRepositoryImpl(dataSource)
         viewModel = MovieListByGenreViewModel(repository)
     }
 
